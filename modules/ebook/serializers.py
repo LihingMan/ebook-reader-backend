@@ -4,6 +4,8 @@ from django.contrib.auth.hashers import check_password
 from .models import User
 from django.contrib.auth.password_validation import validate_password
 from utils.choices import Role
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.exceptions import InvalidToken
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -28,10 +30,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return User.objects.create_ebook_user(**validated_data)
 
 
-# class LoginSerializer(serializers.Serializer):
-#     email = serializers.CharField(max_length=255)
-#     username = serializers.CharField(max_length=255, read_only=True)
-#     password = serializers.CharField(max_length=255, write_only=True)
-#     token = serializers.CharField(max_length=255, read_only=True)
+class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = None
 
-# def validate(self, attrs):
+    def validate(self, attrs):
+        attrs["refresh"] = self.context["request"].COOKIES.get("refresh_token")
+        if attrs["refresh"]:
+            return super().validate(attrs)
+
+        raise InvalidToken("No valid token found in cookie 'refresh_token'")
