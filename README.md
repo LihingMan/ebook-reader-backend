@@ -6,6 +6,7 @@
 - get the .env file
 - setup a db with the name you set in the .env file
 - `python manage.py migrate`
+- do `python manage.py init_data <email> <password> <name>`, e.g. python manage.py init_data test@test.com password "Deez Nuts"
 
 ## Code Formatting
 
