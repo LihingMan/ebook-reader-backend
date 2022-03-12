@@ -9,7 +9,14 @@ from rest_framework_simplejwt.token_blacklist.models import (
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import CookieTokenRefreshSerializer, RegistrationSerializer
+from .serializers import (
+    ChangePasswordSerializer,
+    CookieTokenRefreshSerializer,
+    RegistrationSerializer,
+)
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 class RegisterUserView(generics.GenericAPIView):
@@ -82,3 +89,21 @@ class LogoutUserView(generics.GenericAPIView):
         token = RefreshToken(token=refresh_token)
         token.blacklist()
         return Response({"msg": "Successfully logged out."}, status=status.HTTP_200_OK)
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return JsonResponse(
+            data={"msg": "Successfully changed password"}, status=status.HTTP_200_OK
+        )

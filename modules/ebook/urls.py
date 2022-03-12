@@ -10,6 +10,7 @@ from .views import (
     CookieTokenRefreshView,
     LogoutUserView,
     RegisterUserView,
+    ChangePasswordView,
 )
 
 urlpatterns = [
@@ -20,4 +21,5 @@ urlpatterns = [
     path("refresh-token/", CookieTokenRefreshView.as_view(), name="token_refresh"),
     path("token-verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("register/", RegisterUserView.as_view(), name="register"),
+    path("change-password/", view=ChangePasswordView.as_view(), name="change-password"),
 ]
