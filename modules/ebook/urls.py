@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from .views import (
+from .auth_views import (
     CookieTokenObtainPairView,
     CookieTokenRefreshView,
     LogoutUserView,

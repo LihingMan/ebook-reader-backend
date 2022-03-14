@@ -71,3 +71,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_user(self):
         return self._check_role(Role.USER)
+
+
+class Ebooks(models.Model):
+    title = models.CharField(max_length=500, verbose_name="E-book Title")
+    file = models.FileField()
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="ebook_user"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
