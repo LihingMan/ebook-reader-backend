@@ -9,7 +9,7 @@ from rest_framework_simplejwt.token_blacklist.models import (
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import (
+from .auth_serializers import (
     ChangePasswordSerializer,
     CookieTokenRefreshSerializer,
     RegistrationSerializer,
