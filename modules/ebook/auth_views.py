@@ -47,7 +47,8 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 "refresh_token",
                 response.data["refresh"],
                 max_age=cookie_max_age,
-                httponly=True,
+                # TODO: uncomment httponly and fix issues
+                # httponly=True,
             )
             del response.data["refresh"]
         return super().finalize_response(request, response, *args, **kwargs)
@@ -85,6 +86,9 @@ class LogoutUserView(generics.GenericAPIView):
         #             {"msg": "Successfully logged out. All refresh tokens for the user blacklisted"},
         #             status=status.HTTP_200_OK,
         #         )
+
+        # TODO: find a way to get cookies from client-side headers
+        print(request.COOKIES)
         refresh_token = self.request.data.get("refresh")
         token = RefreshToken(token=refresh_token)
         token.blacklist()
